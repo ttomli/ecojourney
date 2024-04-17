@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "EcoJourney",
+    "version": "0.1",
+    "permissions": [
+        "storage",
+        "activeTab",
+        "declarativeContent",
+        "scripting"
+    ],
+    "action": {
+        "default_icon": "images/leaf-icon16.jpg"
+    },
+    "icons": {
+        "16": "images/leaf-icon16.jpg",
+        "48": "images/leaf-icon48.jpg",
+        "128": "images/leaf-icon128.jpg"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*.google.com/maps*"],
+            "js": ["scripts/content.js"]
+        }
+    ]
+}
