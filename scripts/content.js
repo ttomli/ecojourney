@@ -471,14 +471,15 @@ function handleMutations(mutations, observer) {
                 if (node.matches && node.matches('.UgZKXd')) {  // Replace with the correct class or condition
                     // Assuming loadAndInjectData is your function to inject data
                     myLoadAndInjectData(node);
+                    // observer.disconnect();
                 }
             });
         }
     });
 }
 
-// Selecting the target node where mutations occur due to travel method change
-// const targetNode = document.querySelector('.m6QErb.WNBkOb'); // Adjust this selector based on actual container of the routes
+// // Selecting the target node where mutations occur due to travel method change
+// // const targetNode = document.querySelector('.m6QErb.WNBkOb'); // Adjust this selector based on actual container of the routes
 // const targetNode = document.querySelector('.m6QErb'); // Adjust this selector based on actual container of the routes
 
 // // Creating an observer instance linked to the callback function
@@ -498,35 +499,85 @@ function handleMutations(mutations, observer) {
 //     console.error('Target node not found');
 // }
 
-// Function to start the main observer
-function startObserver(targetNode) {
-    const observer = new MutationObserver(handleMutations);
-    const config = {
-        childList: true,
-        subtree: true,
-        attributes: false
-    };
-    observer.observe(targetNode, config);
+// Function to initialize the observer on the target node
+function initializeObserver() {
+    const targetNode = document.querySelector('.m6QErb'); // Update selector if needed
+
+    if (targetNode) {
+        const observer = new MutationObserver(handleMutations);
+        const config = {
+            childList: true,
+            subtree: true,
+            attributes: false
+        };
+        observer.observe(targetNode, config);
+        console.log('Observer has been initialized.');
+    } else {
+        console.error('Target node not found.');
+    }
 }
 
-// Function to handle mutations for the setup observer
-function handleSetupMutations(mutations, observer) {
+// Setup observer to detect when the target node is added to the document
+const setupObserver = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
-        if (mutation.type === 'childList' && mutation.addedNodes.length) {
-            mutation.addedNodes.forEach(node => {
-                if (node.matches && node.matches('.m6QErb')) {
-                    // Target node has been added, start the main observer and disconnect the setup observer
-                    startObserver(node);
-                    observer.disconnect();
-                }
-            });
-        }
+        mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1 && node.matches('.m6QErb')) { // Ensure this selector targets the correct node
+                initializeObserver(); // Initialize observer when target node is added
+                console.log('Target node has been added.');
+            }
+        });
     });
-}
+});
 
-// Creating a setup observer to watch for when the target node gets added
-const setupObserver = new MutationObserver(handleSetupMutations);
-setupObserver.observe(document, { childList: true, subtree: true });
+// Observe the entire document for the addition of the target node
+setupObserver.observe(document.body, { childList: true, subtree: true });
+
+// Initial call to ensure observer runs immediately on page load if the node exists
+initializeObserver();
+
+// Detect URL changes via history manipulation
+window.addEventListener('popstate', function(event) {
+    // Optionally check if URL path matches expected Google Maps directions page
+    if (location.href.includes("/maps/dir/")) {
+        initializeObserver();
+    }
+});
+
+// Also consider mutations or changes in the DOM that might imply navigational changes
+
+
+
+// Function to start the main observer
+// function startObserver(targetNode) {
+//     const observer = new MutationObserver(handleMutations);
+//     const config = {
+//         childList: true,
+//         subtree: true,
+//         attributes: false
+//     };
+//     observer.observe(targetNode, config);
+// }
+
+// // Function to handle mutations for the setup observer
+// function handleSetupMutations(mutations, observer) {
+//     mutations.forEach(mutation => {
+//         if (mutation.type === 'childList' && mutation.addedNodes.length) {
+//             mutation.addedNodes.forEach(node => {
+//                 if (node.matches && node.matches('.m6QErb')) {
+//                     console.log('Reviewing added node:', node);
+//                     console.log('Node matches:', node.matches('.m6QErb'));
+//                     // Target node has been added, start the main observer and disconnect the setup observer
+//                     startObserver(node);
+//                     // observer.disconnect();
+//                 }
+//             });
+//         }
+//     });
+// }
+
+// // Creating a setup observer to watch for when the target node gets added
+// const setupObserver = new MutationObserver(handleSetupMutations);
+// setupObserver.observe(document, { childList: true, subtree: true });
 
 // Remember to disconnect the observer when it's no longer needed to prevent memory leaks
 // observer.disconnect();
