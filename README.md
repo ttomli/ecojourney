@@ -1,10 +1,11 @@
 # EcoJourney
 
 ## Install
-1. Clone this repository
-2. Go to Chrome Extensions and enable "developer" (top right)
-3. Click Load unpacked and select this repository
-4. Enable Extension in Chrome Extensions (make sure the button is toggled on)
+1. Clone this repository and navigate into it ```cd ecojourney```
+2. Install all dependencies ```npm install```
+3. Go to Chrome Extensions and enable "developer" (top right)
+4. Click Load unpacked and select this repository
+5. Enable Extension in Chrome Extensions (make sure the button is toggled on)
 
 ## Acknowledgements
 
