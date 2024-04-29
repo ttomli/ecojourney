@@ -18,24 +18,24 @@ const myLoadAndInjectData = (node)=>{
     const flightTimeElement = node.querySelector(SPECIAL_FLIGHT_TIME_CLASS);    // GOOD
     const outputInputDivElement = node.querySelector(OUTPUT_INPUT_DIV_CLASS);
 
-    if (node.classList.contains('selected')) {
-        console.log('This node is selected');
-    }
+// if (node.classList.contains('selected')) {
+//      console.log('This node is selected');
+// }
     // Car
     if (node.querySelector('[aria-label="Driving"]')) {
-        console.log('Driving mode selected');
-        console.log(`Driving distance: ${carDistanceElement.textContent} with time: ${timeElement.textContent}`)
+// console.log('Driving mode selected');
+// console.log(`Driving distance: ${carDistanceElement.textContent} with time: ${timeElement.textContent}`)
         const km = getDistanceInKm(carDistanceElement.textContent);
 
         const CO2e = km * 172;
-        console.log(`${km} km with CO2e: ${CO2e}`);
+// console.log(`${km} km with CO2e: ${CO2e}`);
 
         injectHTML(node, CO2e);
     }
      // Transit
      else if (node.querySelector('[aria-label="Transit"]')) {
-        console.log('Transit mode selected');
-        console.log('Transit time:', timeElement.textContent);
+// console.log('Transit mode selected');
+// console.log('Transit time:', timeElement.textContent);
 
         const hours = calculateTime(timeElement.textContent);
 
@@ -44,12 +44,12 @@ const myLoadAndInjectData = (node)=>{
         injectHTML(node, CO2e);
     }
     else if (node.querySelector('[aria-label="Cycling"]')) {
-        console.log('Bicycling mode selected');
+// console.log('Bicycling mode selected');
         injectHTML(node, 0);
     }
     // Walking
     else if (node.querySelector('[aria-label="Walking"]')) {
-        console.log('Walking mode selected');
+// console.log('Walking mode selected');
         injectHTML(node, 0);
     }
     // Flight
@@ -57,13 +57,13 @@ const myLoadAndInjectData = (node)=>{
         // console.log(`Flight mode selected with time: ${flightTimeElement.textContent}`);
         const time = calculateTime(flightTimeElement.textContent);
         const CO2e = calculateFlightCO2e(time);
-        console.log(`Flight time: ${time} hours with CO2e: ${CO2e}`);
+// console.log(`Flight time: ${time} hours with CO2e: ${CO2e}`);
         injectHTML(node, CO2e);
     }
 }
 
 const loadAndInjectData = (node)=>{
-    console.log("LOADING AND INJECTING DATA...")
+// console.log("LOADING AND INJECTING DATA...")
 
     const timeElements = node.querySelectorAll(TIMES_CLASS);    // GOOD
     const transitStepElements = node.querySelectorAll(TRANSIT_STEPS_CLASS);
@@ -152,7 +152,7 @@ const loadAndInjectData = (node)=>{
 
             // this will most likely mean that user is on flight page
             if (timeElements.length !== iconElements.length) {
-                console.log("Using special flight time scenario...")
+// console.log("Using special flight time scenario...")
                 time = calculateTime(document.querySelector(SPECIAL_FLIGHT_TIME_CLASS).innerText);
             } else {
                 time = calculateTime(timeElements[i].innerText);
@@ -464,7 +464,7 @@ const generateQuote = (CO2e)=>{
 
 // This function is triggered when mutations are observed
 function handleMutations(mutations, observer) {
-    console.log('Mutations observed:', mutations);
+// console.log('Mutations observed:', mutations);
     mutations.forEach(mutation => {
         if (mutation.type === 'childList' && mutation.addedNodes.length) {
             mutation.addedNodes.forEach(node => {
@@ -477,27 +477,6 @@ function handleMutations(mutations, observer) {
         }
     });
 }
-
-// // Selecting the target node where mutations occur due to travel method change
-// // const targetNode = document.querySelector('.m6QErb.WNBkOb'); // Adjust this selector based on actual container of the routes
-// const targetNode = document.querySelector('.m6QErb'); // Adjust this selector based on actual container of the routes
-
-// // Creating an observer instance linked to the callback function
-// const observer = new MutationObserver(handleMutations);
-
-// // Configuration of the observer:
-// const config = {
-//     childList: true, // Observing direct children additions or deletions
-//     subtree: true,  // Observing all descendants
-//     attributes: false // Not observing attribute changes
-// };
-
-// // Starting the observation
-// if (targetNode) {
-//     observer.observe(targetNode, config);
-// } else {
-//     console.error('Target node not found');
-// }
 
 // Function to initialize the observer on the target node
 function initializeObserver() {
@@ -542,70 +521,3 @@ window.addEventListener('popstate', function(event) {
         initializeObserver();
     }
 });
-
-// Also consider mutations or changes in the DOM that might imply navigational changes
-
-
-
-// Function to start the main observer
-// function startObserver(targetNode) {
-//     const observer = new MutationObserver(handleMutations);
-//     const config = {
-//         childList: true,
-//         subtree: true,
-//         attributes: false
-//     };
-//     observer.observe(targetNode, config);
-// }
-
-// // Function to handle mutations for the setup observer
-// function handleSetupMutations(mutations, observer) {
-//     mutations.forEach(mutation => {
-//         if (mutation.type === 'childList' && mutation.addedNodes.length) {
-//             mutation.addedNodes.forEach(node => {
-//                 if (node.matches && node.matches('.m6QErb')) {
-//                     console.log('Reviewing added node:', node);
-//                     console.log('Node matches:', node.matches('.m6QErb'));
-//                     // Target node has been added, start the main observer and disconnect the setup observer
-//                     startObserver(node);
-//                     // observer.disconnect();
-//                 }
-//             });
-//         }
-//     });
-// }
-
-// // Creating a setup observer to watch for when the target node gets added
-// const setupObserver = new MutationObserver(handleSetupMutations);
-// setupObserver.observe(document, { childList: true, subtree: true });
-
-// Remember to disconnect the observer when it's no longer needed to prevent memory leaks
-// observer.disconnect();
-
-
-setInterval(()=>{
-    const url = location.href;
-
-    // checks if user changed the URL
-    if (url !== previousUrl) {
-        // overwrite previous URL
-        previousUrl = location.href;
-        console.log(`URL changed to >>> ${url}`);
-
-        // checks if user is on route search page
-        if (url.includes("/maps/dir/")) {
-            // const iconElements = document.querySelectorAll(ICONS_CLASS);
-
-            // // checks if all the data we needed are rendered
-            // if (iconElements.length > 0) {
-            //     // checks if data are already rendered
-            //     if (document.querySelectorAll("." + MY_OUTPUT_CONTAINER_NAME).length === 0) {
-            //         // scrape the data off the site and then inject the desired output
-            //         loadAndInjectData(iconElements);
-            //     }
-            // }
-
-        }
-    }
-}
-, 100);
